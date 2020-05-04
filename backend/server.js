@@ -1,14 +1,22 @@
-var express = require('express');
-var bodyParser = require('body-parser');
-var ObjectID = require('mongodb').ObjectID;
-var db = require('./db');
-var artistsController = require('./controllers/artists');
-var app = express();
+let express = require('express');
+let bodyParser = require('body-parser');
+let ObjectID = require('mongodb').ObjectID;
+let db = require('./db');
+let artistsController = require('./controllers/artists');
+let app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
 }));
+
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET, PUT, PATCH, POST, DELETE");
+    res.header("Access-Control-Allow-Headers", "Content-Type");
+    next();
+});
+
 
 app.get('/', (req, res) => {
     res.send('hello server')
