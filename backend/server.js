@@ -30,18 +30,7 @@ app.post('/artists', artistsController.create)
 
 app.put('/artists/:id', artistsController.update)
 
-app.delete('/artists/:id', (req, res) => {
-    let queryArtistId = req.params.id
-    db.get().collection('artists').deleteOne(
-        { _id: ObjectID(queryArtistId)},
-        (err, result) => {
-            if (err) {
-                console.log(err)
-                return res.sendStatus(500)
-            }
-            res.sendStatus(200)
-    })
-})
+app.delete('/artists/:id', artistsController.delete)
 
 db.connect(
     'mongodb://localhost:27017/artists',{

@@ -21,7 +21,11 @@ exports.findById = (request, response) => {
 
 exports.create = (request, response) => {
     let artist = {
-        name: request.body.name
+        name: request.body.name,
+        photo: request.body.photo,
+        genre: request.body.genre,
+        track: request.body.track,
+        like: request.body.like
     };
     Artists.create(artist, (error, doc) => {
         if (error) {
