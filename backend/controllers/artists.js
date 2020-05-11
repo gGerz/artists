@@ -20,19 +20,20 @@ exports.findById = (request, response) => {
 }
 
 exports.create = (request, response) => {
-    let artist = {
-        name: request.body.name,
-        photo: request.body.photo,
-        genre: request.body.genre,
-        track: request.body.track,
-        like: request.body.like
-    };
-    Artists.create(artist, (error, doc) => {
-        if (error) {
-            return response.sendStatus(500)
-        }
-        response.sendStatus(200)
-    })
+    console.log('request-body', request.body)
+    // let artist = {
+    //     name: request.body.name,
+    //     photo: request.body.photo,
+    //     genre: request.body.genre,
+    //     track: request.body.track,
+    //     like: request.body.like
+    // };
+    // Artists.create(artist, (error, doc) => {
+    //     if (error) {
+    //         return response.sendStatus(500)
+    //     }
+    //     response.sendStatus(200)
+    // })
 }
 
 exports.update = (request, response) => {

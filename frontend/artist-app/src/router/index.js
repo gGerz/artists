@@ -11,9 +11,9 @@ Vue.use(VueRouter)
     component: Home
   },
   {
-    path: '/about',
-    name: 'About',
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    path: '/crud',
+    name: 'CRUD',
+    component: () => import(/* webpackChunkName: "Create" */ '../views/CRUD.vue')
   }
 ]
 

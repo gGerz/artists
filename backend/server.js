@@ -5,7 +5,9 @@ let db = require('./db');
 let artistsController = require('./controllers/artists');
 let app = express();
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({
+    extended: true
+}));
 app.use(bodyParser.urlencoded({
     extended: true
 }));
