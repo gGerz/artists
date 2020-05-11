@@ -8,11 +8,11 @@
     <div class="artist-list">
       <div class="row">
         <div class="col-4" v-for="artist in artistsList">
-          <div class="artist-card">
-            <div class="card-img">
+          <article class="artist-card">
+            <router-link :to="`artist/${artist._id}`" class="card-img">
               <img v-if="artist.photo" :src="artist.photo" :alt="artist.name">
               <img v-else src="../assets/unkown-user.jpeg" :alt="artist.name">
-            </div>
+            </router-link>
             <div class="card-description">
               <div class="card-description__data">
                 <h4>{{artist.name}}</h4>
@@ -20,10 +20,11 @@
                 <p>{{artist.genre}}</p>
               </div>
               <div class="card-description__like">
-                {{artist.like ? 'like' : 'dislike'}}
+                <img src="../assets/like.png" alt="like" v-if="artist.like" @click="setLike(artist.like, artist._id)">
+                <img src="../assets/not-like.jpg" alt="not-like" @click="setLike(artist.like, artist._id)" v-else>
               </div>
             </div>
-          </div>
+          </article>
         </div>
       </div>
     </div>
@@ -32,6 +33,7 @@
 
 <script>
   import axios from 'axios'
+  import showToastr from "@/helpers/showToastr";
   export default {
     name: 'App',
     data () {
@@ -47,11 +49,31 @@
         })
           .then((response) => {
             this.artistsList = response.data
-            console.log('1', response)
           })
           .catch((error) => {
             console.error(error)
           })
+      },
+      setLike (isLiked, id) {
+        let formData = new FormData()
+        formData.append('like', !isLiked)
+        axios({
+          method: 'put',
+          url: `${this.$store.getters.getDomain}/artists/like/${id}`,
+          data: formData,
+          headers: {'Content-Type': 'application/json' }
+        })
+            .then((response) => {
+              if (response.data.success) {
+                let artistIndex = this.artistsList.findIndex(item => item._id === id)
+                this.artistsList[artistIndex].like = response.data.newLikeState
+              } else {
+                showToastr('danger', 'Упс')
+              }
+            })
+            .catch((response) => {
+              console.log(response);
+            });
       }
     },
     created () {
@@ -66,6 +88,7 @@
     padding: 15px 0;
 
     .artist-card {
+      margin: 15px 0;
       box-shadow: 0 3px 10px rgba(32,79,117,.1);
       border-radius: 10px;
       color: #212165;
@@ -73,6 +96,7 @@
 
       .card-img {
         height: 250px;
+        display: block;
         position: relative;
         overflow: hidden;
         border-radius: 10px 10px 0 0;
@@ -111,6 +135,11 @@
           display: flex;
           align-items: center;
           justify-content: center;
+
+          img {
+            max-width: 30px;
+            cursor: pointer;
+          }
         }
       }
     }

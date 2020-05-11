@@ -20,20 +20,30 @@ exports.findById = (request, response) => {
 }
 
 exports.create = (request, response) => {
-    console.log('request-body', request.body)
-    // let artist = {
-    //     name: request.body.name,
-    //     photo: request.body.photo,
-    //     genre: request.body.genre,
-    //     track: request.body.track,
-    //     like: request.body.like
-    // };
-    // Artists.create(artist, (error, doc) => {
-    //     if (error) {
-    //         return response.sendStatus(500)
-    //     }
-    //     response.sendStatus(200)
-    // })
+    if (!request.body.name || !request.body.genre || !request.body.track) {
+        response.send({
+            success: true,
+            text: 'Заполните все обязательные поля!'
+        })
+        return false
+    }
+    let artist = {
+        name: request.body.name,
+        photo: request.body.photo ? request.body.photo : null,
+        genre: request.body.genre,
+        track: request.body.track,
+        like: false
+    };
+    Artists.create(artist, (error, doc) => {
+        if (error) {
+            return response.sendStatus(500)
+        }
+        response.send({
+            success: true,
+            text: 'Artist was added',
+            data: artist
+        })
+    })
 }
 
 exports.update = (request, response) => {
@@ -49,12 +59,33 @@ exports.update = (request, response) => {
 }
 
 exports.delete = (request, response) => {
+    console.log(response)
+    console.log(request)
     let queryArtistId = request.params.id;
     Artists.delete(queryArtistId,(error, doc) => {
         if (error) {
             console.log(error)
             return response.sendStatus(500)
         }
-        response.sendStatus(200)
+        response.send({
+            success: true,
+            text: 'Artist was deleted'
+        })
+    })
+}
+
+exports.like = (request, response) => {
+    let queryArtistId = request.params.id;
+    let newLikeState = request.body.like === 'true';
+    Artists.likeArtist(queryArtistId, newLikeState,(error, doc) => {
+        if (error) {
+            console.log(error)
+            return response.sendStatus(500)
+        }
+        response.send({
+            success: true,
+            newLikeState: newLikeState,
+            text: 'Artist was liked'
+        })
     })
 }

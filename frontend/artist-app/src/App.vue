@@ -31,7 +31,7 @@
 
     .page-title {
       color: #ffffff;
-      margin: 15px 0 30px 0;
+      margin: 30px 0 15px;
       font-weight: bold;
     }
   }

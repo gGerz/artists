@@ -30,3 +30,9 @@ exports.delete = (id, cb) => {
         cb(err, result)
     })
 }
+
+exports.likeArtist = (id, like, cb) => {
+    db.get().collection('artists').updateOne({ _id: ObjectID(id)},{ $set: { like: like } }, (err, result) => {
+        cb(err, result)
+    })
+}

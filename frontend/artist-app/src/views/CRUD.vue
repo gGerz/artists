@@ -7,13 +7,13 @@
         </div>
         <div class="col-12">
           <section class="section create">
-            <Create/>
+            <Create @pushArtist="pushArtist"/>
           </section>
           <section class="section update">
             <Update/>
           </section>
           <section class="section delete">
-            <Delete/>
+            <Delete :artistsList="artistsList" @spliceArtist="spliceArtist"/>
           </section>
         </div>
       </div>
@@ -25,6 +25,7 @@
   import Create from "../components/CRUD/Create";
   import Update from "../components/CRUD/Update";
   import Delete from "../components/CRUD/Delete";
+  import axios from "axios";
   export default {
     name: 'CRUD',
     components: {
@@ -34,11 +35,32 @@
     },
     data() {
       return {
-
+        artistsList: []
       }
     },
     methods: {
-
+      getArtistsList () {
+        axios({
+          method: 'get',
+          url: `${this.$store.getters.getDomain}/artists`,
+        })
+          .then((response) => {
+            this.artistsList = response.data
+          })
+          .catch((error) => {
+            console.error(error)
+          })
+      },
+      pushArtist (artist) {
+        this.artistsList.push(artist)
+      },
+      spliceArtist (id) {
+        let indexToDelete = this.artistsList.findIndex(item => item._id === id)
+        this.artistsList.splice(indexToDelete, 1)
+      }
+    },
+    created () {
+      this.getArtistsList()
     }
   }
 </script>

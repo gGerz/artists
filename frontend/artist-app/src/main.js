@@ -7,15 +7,13 @@ import axios from 'axios'
 
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import VueToastr2 from 'vue-toastr-2'
+import 'vue-toastr-2/dist/vue-toastr-2.min.css'
 
+window.toastr = require('toastr')
+
+Vue.use(VueToastr2)
 Vue.config.productionTip = false
-
-// Axios options
-// Vue.options.root = domain
-// Vue.prototype.$http = axios
-// axios.defaults.withCredentials = true
-//
-// Vue.use(axios)
 
 new Vue({
   router,
